@@ -1,0 +1,83 @@
+###############################################################################
+# Handle line endings automatically for files detected as text
+# and leave all files detected as binary untouched.
+* text=auto
+# Force the following filetypes to have unix eols and encoding, so that Windows does not break them.  If a file is going to be used on linux and windows, we want it invariant, rather than automatically translated, because automatic translation always screw things up.
+.gitignore		text eol=lf	encoding=utf-8
+.gitattributes	text eol=lf	encoding=utf-8
+*.sh			text eol=lf	encoding=utf-8
+*.c				text eol=lf	encoding=utf-8
+*.cpp			text eol=lf	encoding=utf-8
+*.h				text eol=lf encoding=utf-8
+*.txt			text eol=lf	encoding=utf-8
+*.html			text eol=lf	encoding=utf-8
+*.htm			text eol=lf	encoding=utf-8
+
+makefile	text eol=lf
+Makefile	text eol=lf
+
+# Force the following Visual Studio specific filetypes to have Windows eols, so that Git does not break them
+*.rc				text eol=crlf
+*.sln				text eol=crlf
+*.vcproj			text eol=crlf
+*.vcxproj			text eol=crlf
+*.vcxproj.filters	text eol=crlf
+*.vcxproj.user		text eol=crlf
+
+#Don't let git screw with pdf files
+*.pdf -text
+
+# Force binary files to be binary
+*.gif		-textn	-diff
+*.jpg		-textn	-diff
+*.png		-textn	-diff
+
+###############################################################################
+# Set default behavior for command prompt diff.
+#
+# This is need for earlier builds of msysgit that does not have it on by
+# default for csharp files.
+# Note: This is only used by command line
+###############################################################################
+#*.cs	  diff=csharp
+
+###############################################################################
+# Set the merge driver for project and solution files
+#
+# Merging from the command prompt will add diff markers to the files if there
+# are conflicts (Merging from VS is not affected by the settings below, in VS
+# the diff markers are never inserted). Diff markers may cause the following
+# file extensions to fail to load in VS. An alternative would be to treat
+# these files as binary and thus will always conflict and require user
+# intervention with every merge. To do so, just uncomment the entries below
+###############################################################################
+#*.sln		 merge=binary
+#*.csproj	 merge=binary
+#*.vbproj	 merge=binary
+#*.vcxproj	 merge=binary
+#*.vcproj	 merge=binary
+#*.dbproj	 merge=binary
+#*.fsproj	 merge=binary
+#*.lsproj	 merge=binary
+#*.wixproj	 merge=binary
+#*.modelproj merge=binary
+#*.sqlproj	 merge=binary
+#*.wwaproj	 merge=binary
+
+###############################################################################
+# diff behavior for common document formats
+#
+# Convert binary document formats to text before diffing them. This feature
+# is only available from the command line. Turn it on by uncommenting the
+# entries below.
+###############################################################################
+#*.doc	 diff=astextplain
+#*.DOC	 diff=astextplain
+#*.docx	 diff=astextplain
+#*.DOCX	 diff=astextplain
+#*.dot	 diff=astextplain
+#*.DOT	 diff=astextplain
+#*.pdf	 diff=astextplain
+#*.PDF	 diff=astextplain
+#*.rtf	 diff=astextplain
+#*.RTF	 diff=astextplain

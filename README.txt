@@ -20,7 +20,14 @@ CONTENT:
 ./doc:     UDT documentation (HTML)
 ./win:     Visual C++ project files for the Windows version of UDT 
 
+In the Developer Command Prompt for Visual Studio:
+	git clone git@github.com:studi-c/udt4.git
+	cd utd4/win
+	devenv udt.sln /build
+	cd Debug
+	test
 
+In Linux
 To make: 
      make -e os=XXX arch=YYY 
 
@@ -29,8 +36,6 @@ YYY: [IA32(default), POWERPC, IA64, AMD64]
 
 For example, on OS X, you may need to do "make -e os=OSX arch=POWERPC"; 
 on 32-bit i386 Linux system, simply use "make".
-
-On Windows systems, use the Visual C++ project files in ./win directory.
 
 Note for BSD users, please use GNU Make.
 

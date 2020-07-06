@@ -342,9 +342,9 @@ UDT_API int epoll_add_ssock(int eid, SYSSOCKET s, const int* events = NULL);
 UDT_API int epoll_remove_usock(int eid, UDTSOCKET u);
 UDT_API int epoll_remove_ssock(int eid, SYSSOCKET s);
 UDT_API int epoll_wait(int eid, std::set<UDTSOCKET>* readfds, std::set<UDTSOCKET>* writefds, int64_t msTimeOut,
-                       std::set<SYSSOCKET>* lrfds = NULL, std::set<SYSSOCKET>* wrfds = NULL);
-UDT_API int epoll_wait2(int eid, UDTSOCKET* readfds, int* rnum, UDTSOCKET* writefds, int* wnum, int64_t msTimeOut,
-                        SYSSOCKET* lrfds = NULL, int* lrnum = NULL, SYSSOCKET* lwfds = NULL, int* lwnum = NULL);
+                       std::set<SYSSOCKET>* lrfds = nullptr, std::set<SYSSOCKET>* wrfds = nullptr);
+UDT_API int epoll_wait2(int eid, UDTSOCKET* readfds, size_t* rnum, UDTSOCKET* writefds, size_t* wnum, int64_t msTimeOut,
+                        SYSSOCKET* lrfds = nullptr, size_t* lrnum = nullptr, SYSSOCKET* lwfds = nullptr, size_t* lwnum = nullptr);
 UDT_API int epoll_release(int eid);
 UDT_API ERRORINFO& getlasterror();
 UDT_API int getlasterror_code();

@@ -24,7 +24,7 @@ In the Developer Command Prompt for Visual Studio:
 	git clone git@github.com:studi-c/udt4.git
 	cd utd4/win
 	devenv udt.sln /build
-	cd Debug
+	cd x64
 	test
 
 In Linux

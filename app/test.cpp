@@ -204,7 +204,7 @@ DWORD WINAPI Test_1_Srv(LPVOID param)
    */
 
    UDTSOCKET readfds[1];
-   int num = 1;
+   size_t num = 1;
    if (UDT::epoll_wait2(eid, readfds, &num, NULL, NULL, -1) > 0)
    {
       UDT::close(new_sock);

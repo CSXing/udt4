@@ -2322,8 +2322,8 @@ int epoll_wait(int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefds, int64
          fds[count ++] = *it; \
       } \
    }
-int epoll_wait2(int eid, UDTSOCKET* readfds, int* rnum, UDTSOCKET* writefds, int* wnum, int64_t msTimeOut,
-                SYSSOCKET* lrfds, int* lrnum, SYSSOCKET* lwfds, int* lwnum)
+int epoll_wait2(int eid, UDTSOCKET* readfds, size_t* rnum, UDTSOCKET* writefds, size_t* wnum, int64_t msTimeOut,
+                SYSSOCKET* lrfds, size_t* lrnum, SYSSOCKET* lwfds, size_t* lwnum)
 {
    // This API is an alternative format for epoll_wait, created for compatability with other languages.
    // Users need to pass in an array for holding the returned sockets, with the maximum array length

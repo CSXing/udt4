@@ -58,7 +58,7 @@ int createUDTSocket(UDTSOCKET& usock, int port = 0, bool rendezvous = false)
    UDT::setsockopt(usock, 0, UDT_REUSEADDR, &reuse, sizeof(bool));
    UDT::setsockopt(usock, 0, UDT_RENDEZVOUS, &rendezvous, sizeof(bool));
 
-   if (UDT::ERROR == UDT::bind(usock, res->ai_addr, res->ai_addrlen))
+   if (UDT::ERROR == UDT::bind(usock, res->ai_addr, (int)res->ai_addrlen))
    {
       cout << "bind: " << UDT::getlasterror().getErrorMessage() << endl;
       return -1;
@@ -87,7 +87,7 @@ int createTCPSocket(SYSSOCKET& ssock, int port = 0, bool rendezvous = false)
    }
 
    ssock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-   if (bind(ssock, res->ai_addr, res->ai_addrlen) != 0)
+   if (bind(ssock, res->ai_addr, (int)res->ai_addrlen) != 0)
    {
       return -1;
    }
@@ -112,7 +112,7 @@ int connect(UDTSOCKET& usock, int port)
       return -1;
    }
 
-   UDT::connect(usock, peer->ai_addr, peer->ai_addrlen);
+   UDT::connect(usock, peer->ai_addr, (int)peer->ai_addrlen);
 
    freeaddrinfo(peer);
    return 0;
@@ -134,7 +134,7 @@ int tcp_connect(SYSSOCKET& ssock, int port)
       return -1;
    }
 
-   connect(ssock, peer->ai_addr, peer->ai_addrlen);
+   connect(ssock, peer->ai_addr, (int)peer->ai_addrlen);
 
    freeaddrinfo(peer);
    return 0;

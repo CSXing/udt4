@@ -1131,7 +1131,7 @@ int CUDTUnited::epoll_remove_ssock(const int eid, const SYSSOCKET s)
    return m_EPoll.remove_ssock(eid, s);
 }
 
-int CUDTUnited::epoll_wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefds, int64_t msTimeOut, set<SYSSOCKET>* lrfds, set<SYSSOCKET>* lwfds)
+size_t CUDTUnited::epoll_wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefds, int64_t msTimeOut, set<SYSSOCKET>* lrfds, set<SYSSOCKET>* lwfds)
 {
    return m_EPoll.wait(eid, readfds, writefds, msTimeOut, lrfds, lwfds);
 }
@@ -2309,6 +2309,8 @@ int epoll_wait(int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefds, int64
    return CUDT::epoll_wait(eid, readfds, writefds, msTimeOut, lrfds, lwfds);
 }
 
+//  The reason for this ugly macro is that SET_RESULT does the same operation on very different kinds, 
+//  indicating an error in the class structure and factoring.
 #define SET_RESULT(val, num, fds, it) \
    if ((val != NULL) && !val->empty()) \
    { \

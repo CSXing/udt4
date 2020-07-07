@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
    //UDT::setsockopt(serv, 0, UDT_RCVBUF, new int(10000000), sizeof(int));
    //UDT::setsockopt(serv, 0, UDP_RCVBUF, new int(10000000), sizeof(int));
 
-   if (UDT::ERROR == UDT::bind(serv, res->ai_addr, res->ai_addrlen))
+   if (UDT::ERROR == UDT::bind(serv, res->ai_addr, (int)res->ai_addrlen))
    {
       cout << "bind: " << UDT::getlasterror().getErrorMessage() << endl;
       return 0;

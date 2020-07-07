@@ -136,7 +136,7 @@ public: // for CUDTUnited API
       // Returned value:
       //    number of sockets available for IO.
 
-   int wait(const int eid, std::set<UDTSOCKET>* readfds, std::set<UDTSOCKET>* writefds, int64_t msTimeOut, std::set<SYSSOCKET>* lrfds, std::set<SYSSOCKET>* lwfds);
+   size_t wait(const int eid, std::set<UDTSOCKET>* readfds, std::set<UDTSOCKET>* writefds, int64_t msTimeOut, std::set<SYSSOCKET>* lrfds, std::set<SYSSOCKET>* lwfds);
 
       // Functionality:
       //    close and release an EPoll.

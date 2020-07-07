@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
    UDT::setsockopt(serv, 0, UDT_MSS, &mss, sizeof(int));
 #endif
 
-   if (UDT::ERROR == UDT::bind(serv, res->ai_addr, res->ai_addrlen))
+   if (UDT::ERROR == UDT::bind(serv, res->ai_addr, (int)res->ai_addrlen))
    {
       cout << "bind: " << UDT::getlasterror().getErrorMessage() << endl;
       return 0;

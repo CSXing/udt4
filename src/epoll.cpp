@@ -107,7 +107,7 @@ int CEPoll::add_usock(const int eid, const UDTSOCKET& u, const int* events)
    return 0;
 }
 
-int CEPoll::add_ssock(const int eid, const SYSSOCKET& s, const int* events)
+int CEPoll::add_ssock(const int eid, const SYSSOCKET& s, const int* )
 {
    CGuard pg(m_EPollLock);
 
@@ -176,7 +176,7 @@ int CEPoll::remove_ssock(const int eid, const SYSSOCKET& s)
    return 0;
 }
 
-int CEPoll::wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefds, int64_t msTimeOut, set<SYSSOCKET>* lrfds, set<SYSSOCKET>* lwfds)
+size_t CEPoll::wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefds, int64_t msTimeOut, set<SYSSOCKET>* lrfds, set<SYSSOCKET>* lwfds)
 {
    // if all fields is NULL and waiting time is infinite, then this would be a deadlock
    if (!readfds && !writefds && !lrfds && lwfds && (msTimeOut < 0))
@@ -188,7 +188,7 @@ int CEPoll::wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefd
    if (lrfds) lrfds->clear();
    if (lwfds) lwfds->clear();
 
-   int total = 0;
+   size_t total = 0;
 
    int64_t entertime = CTimer::getTime();
    while (true)
@@ -251,32 +251,32 @@ int CEPoll::wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefd
 
          //"select" has a limitation on the number of sockets
 
-         fd_set readfds;
-         fd_set writefds;
-         FD_ZERO(&readfds);
-         FD_ZERO(&writefds);
+         fd_set readfds2;
+         fd_set writefds2;
+         FD_ZERO(&readfds2);
+         FD_ZERO(&writefds2);
 
          for (set<SYSSOCKET>::const_iterator i = p->second.m_sLocals.begin(); i != p->second.m_sLocals.end(); ++ i)
          {
             if (lrfds)
-               FD_SET(*i, &readfds);
+               FD_SET(*i, &readfds2);
             if (lwfds)
-               FD_SET(*i, &writefds);
+               FD_SET(*i, &writefds2);
          }
 
          timeval tv;
          tv.tv_sec = 0;
          tv.tv_usec = 0;
-         if (::select(0, &readfds, &writefds, NULL, &tv) > 0)
+         if (::select(0, &readfds2, &writefds2, NULL, &tv) > 0)
          {
             for (set<SYSSOCKET>::const_iterator i = p->second.m_sLocals.begin(); i != p->second.m_sLocals.end(); ++ i)
             {
-               if (lrfds && FD_ISSET(*i, &readfds))
+               if (lrfds && FD_ISSET(*i, &readfds2))
                {
                   lrfds->insert(*i);
                   ++ total;
                }
-               if (lwfds && FD_ISSET(*i, &writefds))
+               if (lwfds && FD_ISSET(*i, &writefds2))
                {
                   lwfds->insert(*i);
                   ++ total;

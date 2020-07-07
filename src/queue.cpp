@@ -1068,19 +1068,19 @@ TIMER_CHECK:
       uint64_t ctime = currtime - 100000 * CTimer::getCPUFrequency();
       while ((NULL != ul) && (ul->m_llTimeStamp < ctime))
       {
-         CUDT* u = ul->m_pUDT;
+         CUDT* v = ul->m_pUDT;
 
-         if (u->m_bConnected && !u->m_bBroken && !u->m_bClosing)
+         if (v->m_bConnected && !v->m_bBroken && !v->m_bClosing)
          {
-            u->checkTimers();
-            self->m_pRcvUList->update(u);
+            v->checkTimers();
+            self->m_pRcvUList->update(v);
          }
          else
          {
             // the socket must be removed from Hash table first, then RcvUList
-            self->m_pHash->remove(u->m_SocketID);
-            self->m_pRcvUList->remove(u);
-            u->m_pRNode->m_bOnList = false;
+            self->m_pHash->remove(v->m_SocketID);
+            self->m_pRcvUList->remove(v);
+            v->m_pRNode->m_bOnList = false;
          }
 
          ul = self->m_pRcvUList->m_pUList;

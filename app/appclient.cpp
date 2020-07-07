@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
    }
 
    // connect to the server, implict bind
-   if (UDT::ERROR == UDT::connect(client, peer->ai_addr, peer->ai_addrlen))
+   if (UDT::ERROR == UDT::connect(client, peer->ai_addr, (int)peer->ai_addrlen))
    {
       cout << "connect: " << UDT::getlasterror().getErrorMessage() << endl;
       return 0;

@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
    }
 
    // connect to the server, implict bind
-   if (UDT::ERROR == UDT::connect(fhandle, peer->ai_addr, peer->ai_addrlen))
+   if (UDT::ERROR == UDT::connect(fhandle, peer->ai_addr, (int)peer->ai_addrlen))
    {
       cout << "connect: " << UDT::getlasterror().getErrorMessage() << endl;
       return -1;
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 
 
    // send name information of the requested file
-   int len = strlen(argv[3]);
+   auto len = (int)strlen(argv[3]);
 
    if (UDT::ERROR == UDT::send(fhandle, (char*)&len, sizeof(int), 0))
    {

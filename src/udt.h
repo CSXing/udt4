@@ -337,13 +337,13 @@ UDT_API int selectEx(const std::vector<UDTSOCKET>& fds, std::vector<UDTSOCKET>* 
                      std::vector<UDTSOCKET>* writefds, std::vector<UDTSOCKET>* exceptfds, int64_t msTimeOut);
 
 UDT_API int epoll_create();
-UDT_API int epoll_add_usock(int eid, UDTSOCKET u, const int* events = NULL);
-UDT_API int epoll_add_ssock(int eid, SYSSOCKET s, const int* events = NULL);
+UDT_API int epoll_add_usock(int eid, UDTSOCKET u, const int* events = nullptr);
+UDT_API int epoll_add_ssock(int eid, SYSSOCKET s, const int* events = nullptr);
 UDT_API int epoll_remove_usock(int eid, UDTSOCKET u);
 UDT_API int epoll_remove_ssock(int eid, SYSSOCKET s);
-UDT_API int epoll_wait(int eid, std::set<UDTSOCKET>* readfds, std::set<UDTSOCKET>* writefds, int64_t msTimeOut,
+UDT_API size_t epoll_wait(int eid, std::set<UDTSOCKET>* readfds, std::set<UDTSOCKET>* writefds, int64_t msTimeOut,
                        std::set<SYSSOCKET>* lrfds = nullptr, std::set<SYSSOCKET>* wrfds = nullptr);
-UDT_API int epoll_wait2(int eid, UDTSOCKET* readfds, size_t* rnum, UDTSOCKET* writefds, size_t* wnum, int64_t msTimeOut,
+UDT_API size_t epoll_wait2(int eid, UDTSOCKET* readfds, size_t* rnum, UDTSOCKET* writefds, size_t* wnum, int64_t msTimeOut,
                         SYSSOCKET* lrfds = nullptr, size_t* lrnum = nullptr, SYSSOCKET* lwfds = nullptr, size_t* lwnum = nullptr);
 UDT_API int epoll_release(int eid);
 UDT_API ERRORINFO& getlasterror();

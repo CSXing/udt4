@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
    if (2 == argc)
       service = argv[1];
 
-   if (0 != getaddrinfo(NULL, service.c_str(), &hints, &res))
+   if (0 != getaddrinfo(nullptr, service.c_str(), &hints, &res))
    {
       cout << "illegal port number or port is busy.\n" << endl;
       return 0;
@@ -89,10 +89,10 @@ int main(int argc, char* argv[])
 
       #ifndef WIN32
          pthread_t filethread;
-         pthread_create(&filethread, NULL, sendfile, new UDTSOCKET(fhandle));
+         pthread_create(&filethread, nullptr, sendfile, new UDTSOCKET(fhandle));
          pthread_detach(filethread);
       #else
-         CreateThread(NULL, 0, sendfile, new UDTSOCKET(fhandle), 0, NULL);
+         CreateThread(nullptr, 0, sendfile, new UDTSOCKET(fhandle), 0, nullptr);
       #endif
    }
 
@@ -163,7 +163,7 @@ DWORD WINAPI sendfile(LPVOID usocket)
    ifs.close();
 
    #ifndef WIN32
-      return NULL;
+      return nullptr;
    #else
       return 0;
    #endif

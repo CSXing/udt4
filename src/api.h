@@ -174,11 +174,11 @@ public:
    int select(ud_set* readfds, ud_set* writefds, ud_set* exceptfds, const timeval* timeout);
    int selectEx(const std::vector<UDTSOCKET>& fds, std::vector<UDTSOCKET>* readfds, std::vector<UDTSOCKET>* writefds, std::vector<UDTSOCKET>* exceptfds, int64_t msTimeOut);
    int epoll_create();
-   int epoll_add_usock(const int eid, const UDTSOCKET u, const int* events = NULL);
-   int epoll_add_ssock(const int eid, const SYSSOCKET s, const int* events = NULL);
+   int epoll_add_usock(const int eid, const UDTSOCKET u, const int* events = nullptr);
+   int epoll_add_ssock(const int eid, const SYSSOCKET s, const int* events = nullptr);
    int epoll_remove_usock(const int eid, const UDTSOCKET u);
    int epoll_remove_ssock(const int eid, const SYSSOCKET s);
-   size_t epoll_wait(const int eid, std::set<UDTSOCKET>* readfds, std::set<UDTSOCKET>* writefds, int64_t msTimeOut, std::set<SYSSOCKET>* lrfds = NULL, std::set<SYSSOCKET>* lwfds = NULL);
+   size_t epoll_wait(const int eid, std::set<UDTSOCKET>* readfds, std::set<UDTSOCKET>* writefds, int64_t msTimeOut, std::set<SYSSOCKET>* lrfds = nullptr, std::set<SYSSOCKET>* lwfds = nullptr);
    int epoll_release(const int eid);
 
       // Functionality:
@@ -215,7 +215,7 @@ private:
 private:
    pthread_key_t m_TLSError;                         // thread local error record (last error)
    #ifndef WIN32
-      static void TLSDestroy(void* e) {if (NULL != e) delete (CUDTException*)e;}
+      static void TLSDestroy(void* e) {if (nullptr != e) delete (CUDTException*)e;}
    #else
       std::map<DWORD, CUDTException*> m_mTLSRecord;
       void checkTLSValue();
@@ -226,7 +226,7 @@ private:
    void connect_complete(const UDTSOCKET u);
    CUDTSocket* locate(const UDTSOCKET u);
    CUDTSocket* locate(const sockaddr* peer, const UDTSOCKET id, int32_t isn);
-   void updateMux(CUDTSocket* s, const sockaddr* addr = NULL, const UDPSOCKET* = NULL);
+   void updateMux(CUDTSocket* s, const sockaddr* addr = nullptr, const UDPSOCKET* = nullptr);
    void updateMux(CUDTSocket* s, const CUDTSocket* ls);
 
 private:

@@ -103,7 +103,7 @@ public:
       // Parameters:
       //    None.
       // Returned value:
-      //    Pointer to the available unit, NULL if not found.
+      //    Pointer to the available unit, nullptr if not found.
 
    CUnit* getNextAvailUnit();
 
@@ -299,7 +299,7 @@ public:
       // Parameters:
       //    1) [in] id: socket ID
       // Returned value:
-      //    Pointer to a UDT instance, or NULL if not found.
+      //    Pointer to a UDT instance, or nullptr if not found.
 
    CUDT* lookup(int32_t id);
 

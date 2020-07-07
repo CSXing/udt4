@@ -91,7 +91,7 @@ public: // for CUDTUnited API
       // Returned value:
       //    0 if success, otherwise an error number.
 
-   int add_usock(const int eid, const UDTSOCKET& u, const int* events = NULL);
+   int add_usock(const int eid, const UDTSOCKET& u, const int* events = nullptr);
 
       // Functionality:
       //    add a system socket to an EPoll.
@@ -102,7 +102,7 @@ public: // for CUDTUnited API
       // Returned value:
       //    0 if success, otherwise an error number.
 
-   int add_ssock(const int eid, const SYSSOCKET& s, const int* events = NULL);
+   int add_ssock(const int eid, const SYSSOCKET& s, const int* events = nullptr);
 
       // Functionality:
       //    remove a UDT socket event from an EPoll; socket will be removed if no events to watch

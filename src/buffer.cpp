@@ -46,11 +46,11 @@ using namespace std;
 
 CSndBuffer::CSndBuffer(int size, int mss):
 m_BufLock(),
-m_pBlock(NULL),
-m_pFirstBlock(NULL),
-m_pCurrBlock(NULL),
-m_pLastBlock(NULL),
-m_pBuffer(NULL),
+m_pBlock(nullptr),
+m_pFirstBlock(nullptr),
+m_pCurrBlock(nullptr),
+m_pLastBlock(nullptr),
+m_pBuffer(nullptr),
 m_iNextMsgNo(1),
 m_iSize(size),
 m_iMSS(mss),
@@ -60,7 +60,7 @@ m_iCount(0)
    m_pBuffer = new Buffer;
    m_pBuffer->m_pcData = new char [m_iSize * m_iMSS];
    m_pBuffer->m_iSize = m_iSize;
-   m_pBuffer->m_pNext = NULL;
+   m_pBuffer->m_pNext = nullptr;
 
    // circular linked list for out bound packets
    m_pBlock = new Block;
@@ -85,9 +85,9 @@ m_iCount(0)
    m_pFirstBlock = m_pCurrBlock = m_pLastBlock = m_pBlock;
 
    #ifndef WIN32
-      pthread_mutex_init(&m_BufLock, NULL);
+      pthread_mutex_init(&m_BufLock, nullptr);
    #else
-      m_BufLock = CreateMutex(NULL, false, NULL);
+      m_BufLock = CreateMutex(nullptr, false, nullptr);
    #endif
 }
 
@@ -102,7 +102,7 @@ CSndBuffer::~CSndBuffer()
    }
    delete m_pBlock;
 
-   while (m_pBuffer != NULL)
+   while (m_pBuffer != nullptr)
    {
       Buffer* temp = m_pBuffer;
       m_pBuffer = m_pBuffer->m_pNext;
@@ -287,7 +287,7 @@ void CSndBuffer::increase()
    int unitsize = m_pBuffer->m_iSize;
 
    // new physical buffer
-   Buffer* nbuf = NULL;
+   Buffer* nbuf = nullptr;
    try
    {
       nbuf  = new Buffer;
@@ -299,16 +299,16 @@ void CSndBuffer::increase()
       throw CUDTException(3, 2, 0);
    }
    nbuf->m_iSize = unitsize;
-   nbuf->m_pNext = NULL;
+   nbuf->m_pNext = nullptr;
 
    // insert the buffer at the end of the buffer list
    Buffer* p = m_pBuffer;
-   while (NULL != p->m_pNext)
+   while (nullptr != p->m_pNext)
       p = p->m_pNext;
    p->m_pNext = nbuf;
 
    // new packet blocks
-   Block* nblk = NULL;
+   Block* nblk = nullptr;
    try
    {
       nblk = new Block;
@@ -344,7 +344,7 @@ void CSndBuffer::increase()
 ////////////////////////////////////////////////////////////////////////////////
 
 CRcvBuffer::CRcvBuffer(CUnitQueue* queue, int bufsize):
-m_pUnit(NULL),
+m_pUnit(nullptr),
 m_iSize(bufsize),
 m_pUnitQueue(queue),
 m_iStartPos(0),
@@ -354,14 +354,14 @@ m_iNotch(0)
 {
    m_pUnit = new CUnit* [m_iSize];
    for (int i = 0; i < m_iSize; ++ i)
-      m_pUnit[i] = NULL;
+      m_pUnit[i] = nullptr;
 }
 
 CRcvBuffer::~CRcvBuffer()
 {
    for (int i = 0; i < m_iSize; ++ i)
    {
-      if (NULL != m_pUnit[i])
+      if (nullptr != m_pUnit[i])
       {
          m_pUnit[i]->m_iFlag = 0;
          -- m_pUnitQueue->m_iCount;
@@ -377,7 +377,7 @@ int CRcvBuffer::addData(CUnit* unit, int offset)
    if (offset > m_iMaxPos)
       m_iMaxPos = offset;
 
-   if (NULL != m_pUnit[pos])
+   if (nullptr != m_pUnit[pos])
       return -1;
    
    m_pUnit[pos] = unit;
@@ -406,7 +406,7 @@ int CRcvBuffer::readBuffer(char* data, int len)
       if ((rs > unitsize) || (rs == m_pUnit[p]->m_Packet.getLength() - m_iNotch))
       {
          CUnit* tmp = m_pUnit[p];
-         m_pUnit[p] = NULL;
+         m_pUnit[p] = nullptr;
          tmp->m_iFlag = 0;
          -- m_pUnitQueue->m_iCount;
 
@@ -444,7 +444,7 @@ int CRcvBuffer::readBufferToFile(fstream& ofs, int len)
       if ((rs > unitsize) || (rs == m_pUnit[p]->m_Packet.getLength() - m_iNotch))
       {
          CUnit* tmp = m_pUnit[p];
-         m_pUnit[p] = NULL;
+         m_pUnit[p] = nullptr;
          tmp->m_iFlag = 0;
          -- m_pUnitQueue->m_iCount;
 
@@ -491,7 +491,7 @@ int CRcvBuffer::getRcvDataSize() const
 void CRcvBuffer::dropMsg(int32_t msgno)
 {
    for (int i = m_iStartPos, n = (m_iLastAckPos + m_iMaxPos) % m_iSize; i != n; i = (i + 1) % m_iSize)
-      if ((NULL != m_pUnit[i]) && (msgno == m_pUnit[i]->m_Packet.m_iMsgNo))
+      if ((nullptr != m_pUnit[i]) && (msgno == m_pUnit[i]->m_Packet.m_iMsgNo))
          m_pUnit[i]->m_iFlag = 3;
 }
 
@@ -519,7 +519,7 @@ int CRcvBuffer::readMsg(char* data, int len)
       if (!passack)
       {
          CUnit* tmp = m_pUnit[p];
-         m_pUnit[p] = NULL;
+         m_pUnit[p] = nullptr;
          tmp->m_iFlag = 0;
          -- m_pUnitQueue->m_iCount;
       }
@@ -552,7 +552,7 @@ bool CRcvBuffer::scanMsg(int& p, int& q, bool& passack)
    //skip all bad msgs at the beginning
    while (m_iStartPos != m_iLastAckPos)
    {
-      if (NULL == m_pUnit[m_iStartPos])
+      if (nullptr == m_pUnit[m_iStartPos])
       {
          if (++ m_iStartPos == m_iSize)
             m_iStartPos = 0;
@@ -566,7 +566,7 @@ bool CRcvBuffer::scanMsg(int& p, int& q, bool& passack)
          // look ahead for the whole message
          for (int i = m_iStartPos; i != m_iLastAckPos;)
          {
-            if ((NULL == m_pUnit[i]) || (1 != m_pUnit[i]->m_iFlag))
+            if ((nullptr == m_pUnit[i]) || (1 != m_pUnit[i]->m_iFlag))
             {
                good = false;
                break;
@@ -584,7 +584,7 @@ bool CRcvBuffer::scanMsg(int& p, int& q, bool& passack)
       }
 
       CUnit* tmp = m_pUnit[m_iStartPos];
-      m_pUnit[m_iStartPos] = NULL;
+      m_pUnit[m_iStartPos] = nullptr;
       tmp->m_iFlag = 0;
       -- m_pUnitQueue->m_iCount;
 
@@ -600,7 +600,7 @@ bool CRcvBuffer::scanMsg(int& p, int& q, bool& passack)
    // looking for the first message
    for (int i = 0, n = m_iMaxPos + getRcvDataSize(); i <= n; ++ i)
    {
-      if ((NULL != m_pUnit[q]) && (1 == m_pUnit[q]->m_iFlag))
+      if ((nullptr != m_pUnit[q]) && (1 == m_pUnit[q]->m_iFlag))
       {
          switch (m_pUnit[q]->m_Packet.getMsgBoundary())
          {

@@ -33,7 +33,7 @@ int createUDTSocket(UDTSOCKET& usock, int port = 0, bool rendezvous = false)
    hints.ai_socktype = g_Socket_Type;
 
    char service[16];
-   sprintf(service, "%d", port);
+   sprintf_s(service, sizeof(service), "%d", port);
 
    if (0 != getaddrinfo(NULL, service, &hints, &res))
    {
@@ -78,7 +78,7 @@ int createTCPSocket(SYSSOCKET& ssock, int port = 0, bool rendezvous = false)
    hints.ai_socktype = g_Socket_Type;
 
    char service[16];
-   sprintf(service, "%d", port);
+   sprintf_s(service, sizeof(service), "%d", port);
 
    if (0 != getaddrinfo(NULL, service, &hints, &res))
    {
@@ -105,7 +105,7 @@ int connect(UDTSOCKET& usock, int port)
    hints.ai_socktype = g_Socket_Type;
 
    char buffer[16];
-   sprintf(buffer, "%d", port);
+   sprintf_s(buffer, sizeof(buffer), "%d", port);
 
    if (0 != getaddrinfo(g_Localhost, buffer, &hints, &peer))
    {
@@ -127,7 +127,7 @@ int tcp_connect(SYSSOCKET& ssock, int port)
    hints.ai_socktype = g_Socket_Type;
 
    char buffer[16];
-   sprintf(buffer, "%d", port);
+   sprintf_s(buffer, sizeof(buffer), "%d", port);
 
    if (0 != getaddrinfo(g_Localhost, buffer, &hints, &peer))
    {

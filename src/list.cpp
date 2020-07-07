@@ -41,9 +41,9 @@ written by
 #include "list.h"
 
 CSndLossList::CSndLossList(int size):
-m_piData1(NULL),
-m_piData2(NULL),
-m_piNext(NULL),
+m_piData1(nullptr),
+m_piData2(nullptr),
+m_piNext(nullptr),
 m_iHead(-1),
 m_iLength(0),
 m_iSize(size),
@@ -65,7 +65,7 @@ m_ListLock()
    #ifndef WIN32
       pthread_mutex_init(&m_ListLock, 0);
    #else
-      m_ListLock = CreateMutex(NULL, false, NULL);
+      m_ListLock = CreateMutex(nullptr, false, nullptr);
    #endif
 }
 
@@ -420,10 +420,10 @@ int32_t CSndLossList::getLostSeq()
 ////////////////////////////////////////////////////////////////////////////////
 
 CRcvLossList::CRcvLossList(int size):
-m_piData1(NULL),
-m_piData2(NULL),
-m_piNext(NULL),
-m_piPrior(NULL),
+m_piData1(nullptr),
+m_piData2(nullptr),
+m_piNext(nullptr),
+m_piPrior(nullptr),
 m_iHead(-1),
 m_iTail(-1),
 m_iLength(0),

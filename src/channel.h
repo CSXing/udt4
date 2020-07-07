@@ -60,7 +60,7 @@ public:
       // Returned value:
       //    None.
 
-   void open(const sockaddr* addr = NULL);
+   void open(const sockaddr* addr = nullptr);
 
       // Functionality:
       //    Open a UDP channel based on an existing UDP socket.

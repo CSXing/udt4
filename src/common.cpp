@@ -64,8 +64,8 @@ uint64_t CTimer::s_ullCPUFrequency = CTimer::readCPUFrequency();
    pthread_mutex_t CTimer::m_EventLock = PTHREAD_MUTEX_INITIALIZER;
    pthread_cond_t CTimer::m_EventCond = PTHREAD_COND_INITIALIZER;
 #else
-   pthread_mutex_t CTimer::m_EventLock = CreateMutex(NULL, false, NULL);
-   pthread_cond_t CTimer::m_EventCond = CreateEvent(NULL, false, false, NULL);
+   pthread_mutex_t CTimer::m_EventLock = CreateMutex(nullptr, false, nullptr);
+   pthread_cond_t CTimer::m_EventCond = CreateEvent(nullptr, false, false, nullptr);
 #endif
 
 CTimer::CTimer():
@@ -74,11 +74,11 @@ m_TickCond(),
 m_TickLock()
 {
    #ifndef WIN32
-      pthread_mutex_init(&m_TickLock, NULL);
-      pthread_cond_init(&m_TickCond, NULL);
+      pthread_mutex_init(&m_TickLock, nullptr);
+      pthread_cond_init(&m_TickCond, nullptr);
    #else
-      m_TickLock = CreateMutex(NULL, false, NULL);
-      m_TickCond = CreateEvent(NULL, false, false, NULL);
+      m_TickLock = CreateMutex(nullptr, false, nullptr);
+      m_TickCond = CreateEvent(nullptr, false, false, nullptr);
    #endif
 }
 
@@ -142,7 +142,7 @@ uint64_t CTimer::readCPUFrequency()
       timespec ts;
       ts.tv_sec = 0;
       ts.tv_nsec = 100000000;
-      nanosleep(&ts, NULL);
+      nanosleep(&ts, nullptr);
       rdtsc(t2);
 
       // CPU clocks per microsecond
@@ -361,9 +361,9 @@ void CGuard::leaveCS(pthread_mutex_t& lock)
 void CGuard::createMutex(pthread_mutex_t& lock)
 {
    #ifndef WIN32
-      pthread_mutex_init(&lock, NULL);
+      pthread_mutex_init(&lock, nullptr);
    #else
-      lock = CreateMutex(NULL, false, NULL);
+      lock = CreateMutex(nullptr, false, nullptr);
    #endif
 }
 
@@ -379,9 +379,9 @@ void CGuard::releaseMutex(pthread_mutex_t& lock)
 void CGuard::createCond(pthread_cond_t& cond)
 {
    #ifndef WIN32
-      pthread_cond_init(&cond, NULL);
+      pthread_cond_init(&cond, nullptr);
    #else
-      cond = CreateEvent(NULL, false, false, NULL);
+      cond = CreateEvent(nullptr, false, false, nullptr);
    #endif
 }
 
@@ -623,7 +623,7 @@ const char* CUDTException::getErrorMessage()
             m_strMsg += errmsg;
       #else
          LPVOID lpMsgBuf;
-         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, m_iErrno, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
+         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, m_iErrno, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, nullptr);
          m_strMsg += (char*)lpMsgBuf;
          LocalFree(lpMsgBuf);
       #endif

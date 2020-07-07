@@ -101,7 +101,7 @@ void CChannel::open(const sockaddr* addr)
    #endif
       throw CUDTException(1, 0, NET_ERROR);
 
-   if (NULL != addr)
+   if (nullptr != addr)
    {
       socklen_t namelen = m_iSockAddrSize;
 
@@ -120,7 +120,7 @@ void CChannel::open(const sockaddr* addr)
       hints.ai_family = m_iIPversion;
       hints.ai_socktype = SOCK_DGRAM;
 
-      if (0 != ::getaddrinfo(NULL, "0", &hints, &res))
+      if (0 != ::getaddrinfo(nullptr, "0", &hints, &res))
          throw CUDTException(1, 3, NET_ERROR);
 
       if (0 != ::bind(m_iSocket, res->ai_addr, res->ai_addrlen))
@@ -249,7 +249,7 @@ int CChannel::sendto(const sockaddr* addr, CPacket& packet) const
       mh.msg_namelen = m_iSockAddrSize;
       mh.msg_iov = (iovec*)packet.m_PacketVector;
       mh.msg_iovlen = 2;
-      mh.msg_control = NULL;
+      mh.msg_control = nullptr;
       mh.msg_controllen = 0;
       mh.msg_flags = 0;
 
@@ -257,7 +257,7 @@ int CChannel::sendto(const sockaddr* addr, CPacket& packet) const
    #else
       DWORD size = CPacket::m_iPktHdrSize + packet.getLength();
       int addrsize = m_iSockAddrSize;
-      int res = ::WSASendTo(m_iSocket, (LPWSABUF)packet.m_PacketVector, 2, &size, 0, addr, addrsize, NULL, NULL);
+      int res = ::WSASendTo(m_iSocket, (LPWSABUF)packet.m_PacketVector, 2, &size, 0, addr, addrsize, nullptr, nullptr);
       res = (0 == res) ? size : -1;
    #endif
 
@@ -288,7 +288,7 @@ int CChannel::recvfrom(sockaddr* addr, CPacket& packet) const
       mh.msg_namelen = m_iSockAddrSize;
       mh.msg_iov = packet.m_PacketVector;
       mh.msg_iovlen = 2;
-      mh.msg_control = NULL;
+      mh.msg_control = nullptr;
       mh.msg_controllen = 0;
       mh.msg_flags = 0;
 
@@ -299,7 +299,7 @@ int CChannel::recvfrom(sockaddr* addr, CPacket& packet) const
          FD_SET(m_iSocket, &set);
          tv.tv_sec = 0;
          tv.tv_usec = 10000;
-         ::select(m_iSocket+1, &set, NULL, &set, &tv);
+         ::select(m_iSocket+1, &set, nullptr, &set, &tv);
       #endif
 
       int res = ::recvmsg(m_iSocket, &mh, 0);
@@ -308,7 +308,7 @@ int CChannel::recvfrom(sockaddr* addr, CPacket& packet) const
       DWORD flag = 0;
       int addrsize = m_iSockAddrSize;
 
-      int res = ::WSARecvFrom(m_iSocket, (LPWSABUF)packet.m_PacketVector, 2, &size, &flag, addr, &addrsize, NULL, NULL);
+      int res = ::WSARecvFrom(m_iSocket, (LPWSABUF)packet.m_PacketVector, 2, &size, &flag, addr, &addrsize, nullptr, nullptr);
       res = (0 == res) ? size : -1;
    #endif
 

@@ -54,7 +54,7 @@ m_iMSS(),
 m_iSndCurrSeqNo(),
 m_iRcvRate(),
 m_iRTT(),
-m_pcParam(NULL),
+m_pcParam(nullptr),
 m_iPSize(0),
 m_UDT(),
 m_iACKPeriod(0),
@@ -90,7 +90,7 @@ void CCC::sendCustomMsg(CPacket& pkt) const
 {
    CUDT* u = CUDT::getUDTHandle(m_UDT);
 
-   if (NULL != u)
+   if (nullptr != u)
    {
       pkt.m_iID = u->m_PeerID;
       u->m_pSndQueue->sendto(u->m_pPeerAddr, pkt);
@@ -102,12 +102,12 @@ const CPerfMon* CCC::getPerfInfo()
    try
    {
       CUDT* u = CUDT::getUDTHandle(m_UDT);
-      if (NULL != u)
+      if (nullptr != u)
          u->sample(&m_PerfInfo, false);
    }
    catch (...)
    {
-      return NULL;
+      return nullptr;
    }
 
    return &m_PerfInfo;

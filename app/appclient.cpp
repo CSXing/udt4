@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
    hints.ai_socktype = SOCK_STREAM;
    //hints.ai_socktype = SOCK_DGRAM;
 
-   if (0 != getaddrinfo(NULL, "9000", &hints, &local))
+   if (0 != getaddrinfo(nullptr, "9000", &hints, &local))
    {
       cout << "incorrect network address.\n" << endl;
       return 0;
@@ -90,19 +90,19 @@ int main(int argc, char* argv[])
    freeaddrinfo(peer);
 
    // using CC method
-   //CUDPBlast* cchandle = NULL;
+   //CUDPBlast* cchandle = nullptr;
    //int temp;
    //UDT::getsockopt(client, 0, UDT_CC, &cchandle, &temp);
-   //if (NULL != cchandle)
+   //if (nullptr != cchandle)
    //   cchandle->setRate(500);
 
    int size = 100000;
    char* data = new char[size];
 
    #ifndef WIN32
-      pthread_create(new pthread_t, NULL, monitor, &client);
+      pthread_create(new pthread_t, nullptr, monitor, &client);
    #else
-      CreateThread(NULL, 0, monitor, &client, 0, NULL);
+      CreateThread(nullptr, 0, monitor, &client, 0, nullptr);
    #endif
 
    for (int i = 0; i < 1000000; i ++)
@@ -164,7 +164,7 @@ DWORD WINAPI monitor(LPVOID s)
    }
 
    #ifndef WIN32
-      return NULL;
+      return nullptr;
    #else
       return 0;
    #endif

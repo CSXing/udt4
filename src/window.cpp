@@ -46,9 +46,9 @@ written by
 using namespace std;
 
 CACKWindow::CACKWindow(int size):
-m_piACKSeqNo(NULL),
-m_piACK(NULL),
-m_pTimeStamp(NULL),
+m_piACKSeqNo(nullptr),
+m_piACK(nullptr),
+m_pTimeStamp(nullptr),
 m_iSize(size),
 m_iHead(0),
 m_iTail(0)
@@ -146,10 +146,10 @@ int CACKWindow::acknowledge(int32_t seq, int32_t& ack)
 
 CPktTimeWindow::CPktTimeWindow(int asize, int psize):
 m_iAWSize(asize),
-m_piPktWindow(NULL),
+m_piPktWindow(nullptr),
 m_iPktWindowPtr(0),
 m_iPWSize(psize),
-m_piProbeWindow(NULL),
+m_piProbeWindow(nullptr),
 m_iProbeWindowPtr(0),
 m_iLastSentTime(0),
 m_iMinPktSndInt(1000000),

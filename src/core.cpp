@@ -81,19 +81,19 @@ const int CUDT::m_iSelfClockInterval = 64;
 
 CUDT::CUDT()
 {
-   m_pSndBuffer = NULL;
-   m_pRcvBuffer = NULL;
-   m_pSndLossList = NULL;
-   m_pRcvLossList = NULL;
-   m_pACKWindow = NULL;
-   m_pSndTimeWindow = NULL;
-   m_pRcvTimeWindow = NULL;
+   m_pSndBuffer = nullptr;
+   m_pRcvBuffer = nullptr;
+   m_pSndLossList = nullptr;
+   m_pRcvLossList = nullptr;
+   m_pACKWindow = nullptr;
+   m_pSndTimeWindow = nullptr;
+   m_pRcvTimeWindow = nullptr;
 
-   m_pSndQueue = NULL;
-   m_pRcvQueue = NULL;
-   m_pPeerAddr = NULL;
-   m_pSNode = NULL;
-   m_pRNode = NULL;
+   m_pSndQueue = nullptr;
+   m_pRcvQueue = nullptr;
+   m_pPeerAddr = nullptr;
+   m_pSNode = nullptr;
+   m_pRNode = nullptr;
 
    // Initilize mutex and condition variables
    initSynch();
@@ -118,8 +118,8 @@ CUDT::CUDT()
    m_llMaxBW = -1;
 
    m_pCCFactory = new CCCFactory<CUDTCC>;
-   m_pCC = NULL;
-   m_pCache = NULL;
+   m_pCC = nullptr;
+   m_pCache = nullptr;
 
    // Initial status
    m_bOpened = false;
@@ -135,19 +135,19 @@ CUDT::CUDT()
 
 CUDT::CUDT(const CUDT& ancestor)
 {
-   m_pSndBuffer = NULL;
-   m_pRcvBuffer = NULL;
-   m_pSndLossList = NULL;
-   m_pRcvLossList = NULL;
-   m_pACKWindow = NULL;
-   m_pSndTimeWindow = NULL;
-   m_pRcvTimeWindow = NULL;
+   m_pSndBuffer = nullptr;
+   m_pRcvBuffer = nullptr;
+   m_pSndLossList = nullptr;
+   m_pRcvLossList = nullptr;
+   m_pACKWindow = nullptr;
+   m_pSndTimeWindow = nullptr;
+   m_pRcvTimeWindow = nullptr;
 
-   m_pSndQueue = NULL;
-   m_pRcvQueue = NULL;
-   m_pPeerAddr = NULL;
-   m_pSNode = NULL;
-   m_pRNode = NULL;
+   m_pSndQueue = nullptr;
+   m_pRcvQueue = nullptr;
+   m_pPeerAddr = nullptr;
+   m_pSNode = nullptr;
+   m_pRNode = nullptr;
 
    // Initilize mutex and condition variables
    initSynch();
@@ -171,7 +171,7 @@ CUDT::CUDT(const CUDT& ancestor)
    m_llMaxBW = ancestor.m_llMaxBW;
 
    m_pCCFactory = ancestor.m_pCCFactory->clone();
-   m_pCC = NULL;
+   m_pCC = nullptr;
    m_pCache = ancestor.m_pCache;
 
    // Initial status
@@ -245,7 +245,7 @@ void CUDT::setOpt(UDTOpt optName, const void* optval, int)
    case UDT_CC:
       if (m_bConnecting || m_bConnected)
          throw CUDTException(5, 1, 0);
-      if (NULL != m_pCCFactory)
+      if (nullptr != m_pCCFactory)
          delete m_pCCFactory;
       m_pCCFactory = ((CCCVirtualFactory *)optval)->clone();
 
@@ -503,17 +503,17 @@ void CUDT::open()
    m_llSndDuration = m_llSndDurationTotal = 0;
 
    // structures for queue
-   if (NULL == m_pSNode)
+   if (nullptr == m_pSNode)
       m_pSNode = new CSNode;
    m_pSNode->m_pUDT = this;
    m_pSNode->m_llTimeStamp = 1;
    m_pSNode->m_iHeapLoc = -1;
 
-   if (NULL == m_pRNode)
+   if (nullptr == m_pRNode)
       m_pRNode = new CRNode;
    m_pRNode->m_pUDT = this;
    m_pRNode->m_llTimeStamp = 1;
-   m_pRNode->m_pPrev = m_pRNode->m_pNext = NULL;
+   m_pRNode->m_pPrev = m_pRNode->m_pNext = nullptr;
    m_pRNode->m_bOnList = false;
 
    m_iRTT = 10 * m_iSYNInterval;
@@ -618,7 +618,7 @@ void CUDT::connect(const sockaddr* serv_addr)
    // Inform the server my configurations.
    CPacket request;
    char* reqdata = new char [m_iPayloadSize];
-   request.pack(0, NULL, reqdata, m_iPayloadSize);
+   request.pack(0, nullptr, reqdata, m_iPayloadSize);
    // ID = 0, connection request
    request.m_iID = 0;
 
@@ -638,7 +638,7 @@ void CUDT::connect(const sockaddr* serv_addr)
    // Wait for the negotiated configurations from the peer side.
    CPacket response;
    char* resdata = new char [m_iPayloadSize];
-   response.pack(0, NULL, resdata, m_iPayloadSize);
+   response.pack(0, nullptr, resdata, m_iPayloadSize);
 
    CUDTException e(0, 0);
 
@@ -906,7 +906,7 @@ void CUDT::connect(const sockaddr* peer, CHandShake* hs)
    int size = CHandShake::m_iContentSize;
    char* buffer = new char[size];
    hs->serialize(buffer, size);
-   response.pack(0, NULL, buffer, size);
+   response.pack(0, nullptr, buffer, size);
    response.m_iID = m_PeerID;
    m_pSndQueue->sendto(peer, response);
    delete [] buffer;
@@ -940,7 +940,7 @@ void CUDT::close()
             timespec ts;
             ts.tv_sec = 0;
             ts.tv_nsec = 1000000;
-            nanosleep(&ts, NULL);
+            nanosleep(&ts, nullptr);
          #else
             Sleep(1);
          #endif
@@ -1626,8 +1626,8 @@ void CUDT::sample(CPerfMon* perf, bool clear)
       if (WAIT_OBJECT_0 == WaitForSingleObject(m_ConnectionLock, 0))
    #endif
    {
-      perf->byteAvailSndBuf = (NULL == m_pSndBuffer) ? 0 : (m_iSndBufSize - m_pSndBuffer->getCurrBufSize()) * m_iMSS;
-      perf->byteAvailRcvBuf = (NULL == m_pRcvBuffer) ? 0 : m_pRcvBuffer->getAvailBufSize() * m_iMSS;
+      perf->byteAvailSndBuf = (nullptr == m_pSndBuffer) ? 0 : (m_iSndBufSize - m_pSndBuffer->getCurrBufSize()) * m_iMSS;
+      perf->byteAvailRcvBuf = (nullptr == m_pRcvBuffer) ? 0 : m_pRcvBuffer->getAvailBufSize() * m_iMSS;
 
       #ifndef WIN32
          pthread_mutex_unlock(&m_ConnectionLock);
@@ -1664,23 +1664,23 @@ void CUDT::CCUpdate()
 void CUDT::initSynch()
 {
    #ifndef WIN32
-      pthread_mutex_init(&m_SendBlockLock, NULL);
-      pthread_cond_init(&m_SendBlockCond, NULL);
-      pthread_mutex_init(&m_RecvDataLock, NULL);
-      pthread_cond_init(&m_RecvDataCond, NULL);
-      pthread_mutex_init(&m_SendLock, NULL);
-      pthread_mutex_init(&m_RecvLock, NULL);
-      pthread_mutex_init(&m_AckLock, NULL);
-      pthread_mutex_init(&m_ConnectionLock, NULL);
+      pthread_mutex_init(&m_SendBlockLock, nullptr);
+      pthread_cond_init(&m_SendBlockCond, nullptr);
+      pthread_mutex_init(&m_RecvDataLock, nullptr);
+      pthread_cond_init(&m_RecvDataCond, nullptr);
+      pthread_mutex_init(&m_SendLock, nullptr);
+      pthread_mutex_init(&m_RecvLock, nullptr);
+      pthread_mutex_init(&m_AckLock, nullptr);
+      pthread_mutex_init(&m_ConnectionLock, nullptr);
    #else
-      m_SendBlockLock = CreateMutex(NULL, false, NULL);
-      m_SendBlockCond = CreateEvent(NULL, false, false, NULL);
-      m_RecvDataLock = CreateMutex(NULL, false, NULL);
-      m_RecvDataCond = CreateEvent(NULL, false, false, NULL);
-      m_SendLock = CreateMutex(NULL, false, NULL);
-      m_RecvLock = CreateMutex(NULL, false, NULL);
-      m_AckLock = CreateMutex(NULL, false, NULL);
-      m_ConnectionLock = CreateMutex(NULL, false, NULL);
+      m_SendBlockLock = CreateMutex(nullptr, false, nullptr);
+      m_SendBlockCond = CreateEvent(nullptr, false, false, nullptr);
+      m_RecvDataLock = CreateMutex(nullptr, false, nullptr);
+      m_RecvDataCond = CreateEvent(nullptr, false, false, nullptr);
+      m_SendLock = CreateMutex(nullptr, false, nullptr);
+      m_RecvLock = CreateMutex(nullptr, false, nullptr);
+      m_AckLock = CreateMutex(nullptr, false, nullptr);
+      m_ConnectionLock = CreateMutex(nullptr, false, nullptr);
    #endif
 }
 
@@ -1758,7 +1758,7 @@ void CUDT::sendCtrl(int pkttype, void* lparam, void* rparam, int size)
       // to save time on buffer processing and bandwidth/AS measurement, a lite ACK only feeds back an ACK number
       if (4 == size)
       {
-         ctrlpkt.pack(pkttype, NULL, &ack, size);
+         ctrlpkt.pack(pkttype, nullptr, &ack, size);
          ctrlpkt.m_iID = m_PeerID;
          m_pSndQueue->sendto(m_pPeerAddr, ctrlpkt);
 
@@ -1847,17 +1847,17 @@ void CUDT::sendCtrl(int pkttype, void* lparam, void* rparam, int size)
 
    case 3: //011 - Loss Report
       {
-      if (NULL != rparam)
+      if (nullptr != rparam)
       {
          if (1 == size)
          {
             // only 1 loss packet
-            ctrlpkt.pack(pkttype, NULL, (int32_t *)rparam + 1, 4);
+            ctrlpkt.pack(pkttype, nullptr, (int32_t *)rparam + 1, 4);
          }
          else
          {
             // more than 1 loss packets
-            ctrlpkt.pack(pkttype, NULL, rparam, 8);
+            ctrlpkt.pack(pkttype, nullptr, rparam, 8);
          }
 
          ctrlpkt.m_iID = m_PeerID;
@@ -1877,7 +1877,7 @@ void CUDT::sendCtrl(int pkttype, void* lparam, void* rparam, int size)
 
          if (0 < losslen)
          {
-            ctrlpkt.pack(pkttype, NULL, data, losslen * 4);
+            ctrlpkt.pack(pkttype, nullptr, data, losslen * 4);
             ctrlpkt.m_iID = m_PeerID;
             m_pSndQueue->sendto(m_pPeerAddr, ctrlpkt);
 
@@ -1916,7 +1916,7 @@ void CUDT::sendCtrl(int pkttype, void* lparam, void* rparam, int size)
       break;
 
    case 0: //000 - Handshake
-      ctrlpkt.pack(pkttype, NULL, rparam, sizeof(CHandShake));
+      ctrlpkt.pack(pkttype, nullptr, rparam, sizeof(CHandShake));
       ctrlpkt.m_iID = m_PeerID;
       m_pSndQueue->sendto(m_pPeerAddr, ctrlpkt);
 
@@ -2205,7 +2205,7 @@ void CUDT::processCtrl(CPacket& ctrlpkt)
          char* hs = new char [m_iPayloadSize];
          int hs_size = m_iPayloadSize;
          initdata.serialize(hs, hs_size);
-         sendCtrl(0, NULL, hs, hs_size);
+         sendCtrl(0, nullptr, hs, hs_size);
          delete [] hs;
       }
 
@@ -2425,7 +2425,7 @@ int CUDT::processData(CUnit* unit)
       lossdata[1] = CSeqNo::decseq(packet.m_iSeqNo);
 
       // Generate loss report immediately.
-      sendCtrl(3, NULL, lossdata, (CSeqNo::incseq(m_iRcvCurrSeqNo) == CSeqNo::decseq(packet.m_iSeqNo)) ? 1 : 2);
+      sendCtrl(3, nullptr, lossdata, (CSeqNo::incseq(m_iRcvCurrSeqNo) == CSeqNo::decseq(packet.m_iSeqNo)) ? 1 : 2);
 
       int loss = CSeqNo::seqlen(m_iRcvCurrSeqNo, packet.m_iSeqNo) - 2;
       m_iTraceRcvLoss += loss;
@@ -2558,7 +2558,7 @@ void CUDT::checkTimers()
    else if (m_iSelfClockInterval * m_iLightACKCount <= m_iPktCount)
    {
       //send a "light" ACK
-      sendCtrl(2, NULL, NULL, 4);
+      sendCtrl(2, nullptr, nullptr, 4);
       ++ m_iLightACKCount;
    }
 

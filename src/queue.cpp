@@ -54,9 +54,9 @@ written by
 using namespace std;
 
 CUnitQueue::CUnitQueue():
-m_pQEntry(NULL),
-m_pCurrQueue(NULL),
-m_pLastQueue(NULL),
+m_pQEntry(nullptr),
+m_pCurrQueue(nullptr),
+m_pLastQueue(nullptr),
 m_iSize(0),
 m_iCount(0),
 m_iMSS(),
@@ -68,14 +68,14 @@ CUnitQueue::~CUnitQueue()
 {
    CQEntry* p = m_pQEntry;
 
-   while (p != NULL)
+   while (p != nullptr)
    {
       delete [] p->m_pUnit;
       delete [] p->m_pBuffer;
 
       CQEntry* q = p;
       if (p == m_pLastQueue)
-         p = NULL;
+         p = nullptr;
       else
          p = p->m_pNext;
       delete q;
@@ -84,9 +84,9 @@ CUnitQueue::~CUnitQueue()
 
 int CUnitQueue::init(int size, int mss, int version)
 {
-   CQEntry* tempq = NULL;
-   CUnit* tempu = NULL;
-   char* tempb = NULL;
+   CQEntry* tempq = nullptr;
+   CUnit* tempu = nullptr;
+   char* tempb = nullptr;
 
    try
    {
@@ -129,7 +129,7 @@ int CUnitQueue::increase()
    // adjust/correct m_iCount
    int real_count = 0;
    CQEntry* p = m_pQEntry;
-   while (p != NULL)
+   while (p != nullptr)
    {
       CUnit* u = p->m_pUnit;
       for (CUnit* end = u + p->m_iSize; u != end; ++ u)
@@ -137,7 +137,7 @@ int CUnitQueue::increase()
             ++ real_count;
 
       if (p == m_pLastQueue)
-         p = NULL;
+         p = nullptr;
       else
          p = p->m_pNext;
    }
@@ -145,9 +145,9 @@ int CUnitQueue::increase()
    if (double(m_iCount) / m_iSize < 0.9)
       return -1;
 
-   CQEntry* tempq = NULL;
-   CUnit* tempu = NULL;
-   char* tempb = NULL;
+   CQEntry* tempq = nullptr;
+   CUnit* tempu = nullptr;
+   char* tempb = nullptr;
 
    // all queues have the same size
    int size = m_pQEntry->m_iSize;
@@ -197,7 +197,7 @@ CUnit* CUnitQueue::getNextAvailUnit()
       increase();
 
    if (m_iCount >= m_iSize)
-      return NULL;
+      return nullptr;
 
    CQEntry* entrance = m_pCurrQueue;
 
@@ -219,25 +219,25 @@ CUnit* CUnitQueue::getNextAvailUnit()
 
    increase();
 
-   return NULL;
+   return nullptr;
 }
 
 
 CSndUList::CSndUList():
-m_pHeap(NULL),
+m_pHeap(nullptr),
 m_iArrayLength(4096),
 m_iLastEntry(-1),
 m_ListLock(),
-m_pWindowLock(NULL),
-m_pWindowCond(NULL),
-m_pTimer(NULL)
+m_pWindowLock(nullptr),
+m_pWindowCond(nullptr),
+m_pTimer(nullptr)
 {
    m_pHeap = new CSNode*[m_iArrayLength];
 
    #ifndef WIN32
-      pthread_mutex_init(&m_ListLock, NULL);
+      pthread_mutex_init(&m_ListLock, nullptr);
    #else
-      m_ListLock = CreateMutex(NULL, false, NULL);
+      m_ListLock = CreateMutex(nullptr, false, nullptr);
    #endif
 }
 
@@ -259,7 +259,7 @@ void CSndUList::insert(int64_t ts, const CUDT* u)
    // increase the heap array size if necessary
    if (m_iLastEntry == m_iArrayLength - 1)
    {
-      CSNode** temp = NULL;
+      CSNode** temp = nullptr;
 
       try
       {
@@ -444,21 +444,21 @@ void CSndUList::remove_(const CUDT* u)
 //
 CSndQueue::CSndQueue():
 m_WorkerThread(),
-m_pSndUList(NULL),
-m_pChannel(NULL),
-m_pTimer(NULL),
+m_pSndUList(nullptr),
+m_pChannel(nullptr),
+m_pTimer(nullptr),
 m_WindowLock(),
 m_WindowCond(),
 m_bClosing(false),
 m_ExitCond()
 {
    #ifndef WIN32
-      pthread_cond_init(&m_WindowCond, NULL);
-      pthread_mutex_init(&m_WindowLock, NULL);
+      pthread_cond_init(&m_WindowCond, nullptr);
+      pthread_mutex_init(&m_WindowLock, nullptr);
    #else
-      m_WindowLock = CreateMutex(NULL, false, NULL);
-      m_WindowCond = CreateEvent(NULL, false, false, NULL);
-      m_ExitCond = CreateEvent(NULL, false, false, NULL);
+      m_WindowLock = CreateMutex(nullptr, false, nullptr);
+      m_WindowCond = CreateEvent(nullptr, false, false, nullptr);
+      m_ExitCond = CreateEvent(nullptr, false, false, nullptr);
    #endif
 }
 
@@ -471,12 +471,12 @@ CSndQueue::~CSndQueue()
       pthread_cond_signal(&m_WindowCond);
       pthread_mutex_unlock(&m_WindowLock);
       if (0 != m_WorkerThread)
-         pthread_join(m_WorkerThread, NULL);
+         pthread_join(m_WorkerThread, nullptr);
       pthread_cond_destroy(&m_WindowCond);
       pthread_mutex_destroy(&m_WindowLock);
    #else
       SetEvent(m_WindowCond);
-      if (NULL != m_WorkerThread)
+      if (nullptr != m_WorkerThread)
          WaitForSingleObject(m_ExitCond, INFINITE);
       CloseHandle(m_WorkerThread);
       CloseHandle(m_WindowLock);
@@ -497,15 +497,15 @@ void CSndQueue::init(CChannel* c, CTimer* t)
    m_pSndUList->m_pTimer = m_pTimer;
 
    #ifndef WIN32
-      if (0 != pthread_create(&m_WorkerThread, NULL, CSndQueue::worker, this))
+      if (0 != pthread_create(&m_WorkerThread, nullptr, CSndQueue::worker, this))
       {
          m_WorkerThread = 0;
          throw CUDTException(3, 1);
       }
    #else
       DWORD threadID;
-      m_WorkerThread = CreateThread(NULL, 0, CSndQueue::worker, this, 0, &threadID);
-      if (NULL == m_WorkerThread)
+      m_WorkerThread = CreateThread(nullptr, 0, CSndQueue::worker, this, 0, &threadID);
+      if (nullptr == m_WorkerThread)
          throw CUDTException(3, 1);
    #endif
 }
@@ -553,7 +553,7 @@ void CSndQueue::init(CChannel* c, CTimer* t)
    }
 
    #ifndef WIN32
-      return NULL;
+      return nullptr;
    #else
       SetEvent(self->m_ExitCond);
       return 0;
@@ -570,8 +570,8 @@ int CSndQueue::sendto(const sockaddr* addr, CPacket& packet)
 
 //
 CRcvUList::CRcvUList():
-m_pUList(NULL),
-m_pLast(NULL)
+m_pUList(nullptr),
+m_pLast(nullptr)
 {
 }
 
@@ -584,10 +584,10 @@ void CRcvUList::insert(const CUDT* u)
    CRNode* n = u->m_pRNode;
    CTimer::rdtsc(n->m_llTimeStamp);
 
-   if (NULL == m_pUList)
+   if (nullptr == m_pUList)
    {
       // empty list, insert as the single node
-      n->m_pPrev = n->m_pNext = NULL;
+      n->m_pPrev = n->m_pNext = nullptr;
       m_pLast = m_pUList = n;
 
       return;
@@ -595,7 +595,7 @@ void CRcvUList::insert(const CUDT* u)
 
    // always insert at the end for RcvUList
    n->m_pPrev = m_pLast;
-   n->m_pNext = NULL;
+   n->m_pNext = nullptr;
    m_pLast->m_pNext = n;
    m_pLast = n;
 }
@@ -607,19 +607,19 @@ void CRcvUList::remove(const CUDT* u)
    if (!n->m_bOnList)
       return;
 
-   if (NULL == n->m_pPrev)
+   if (nullptr == n->m_pPrev)
    {
       // n is the first node
       m_pUList = n->m_pNext;
-      if (NULL == m_pUList)
-         m_pLast = NULL;
+      if (nullptr == m_pUList)
+         m_pLast = nullptr;
       else
-         m_pUList->m_pPrev = NULL;
+         m_pUList->m_pPrev = nullptr;
    }
    else
    {
       n->m_pPrev->m_pNext = n->m_pNext;
-      if (NULL == n->m_pNext)
+      if (nullptr == n->m_pNext)
       {
          // n is the last node
          m_pLast = n->m_pPrev;
@@ -628,7 +628,7 @@ void CRcvUList::remove(const CUDT* u)
          n->m_pNext->m_pPrev = n->m_pPrev;
    }
 
-   n->m_pNext = n->m_pPrev = NULL;
+   n->m_pNext = n->m_pPrev = nullptr;
 }
 
 void CRcvUList::update(const CUDT* u)
@@ -641,13 +641,13 @@ void CRcvUList::update(const CUDT* u)
    CTimer::rdtsc(n->m_llTimeStamp);
 
    // if n is the last node, do not need to change
-   if (NULL == n->m_pNext)
+   if (nullptr == n->m_pNext)
       return;
 
-   if (NULL == n->m_pPrev)
+   if (nullptr == n->m_pPrev)
    {
       m_pUList = n->m_pNext;
-      m_pUList->m_pPrev = NULL;
+      m_pUList->m_pPrev = nullptr;
    }
    else
    {
@@ -656,14 +656,14 @@ void CRcvUList::update(const CUDT* u)
    }
 
    n->m_pPrev = m_pLast;
-   n->m_pNext = NULL;
+   n->m_pNext = nullptr;
    m_pLast->m_pNext = n;
    m_pLast = n;
 }
 
 //
 CHash::CHash():
-m_pBucket(NULL),
+m_pBucket(nullptr),
 m_iHashSize(0)
 {
 }
@@ -673,7 +673,7 @@ CHash::~CHash()
    for (int i = 0; i < m_iHashSize; ++ i)
    {
       CBucket* b = m_pBucket[i];
-      while (NULL != b)
+      while (nullptr != b)
       {
          CBucket* n = b->m_pNext;
          delete b;
@@ -689,7 +689,7 @@ void CHash::init(int size)
    m_pBucket = new CBucket* [size];
 
    for (int i = 0; i < size; ++ i)
-      m_pBucket[i] = NULL;
+      m_pBucket[i] = nullptr;
 
    m_iHashSize = size;
 }
@@ -699,14 +699,14 @@ CUDT* CHash::lookup(int32_t id)
    // simple hash function (% hash table size); suitable for socket descriptors
    CBucket* b = m_pBucket[id % m_iHashSize];
 
-   while (NULL != b)
+   while (nullptr != b)
    {
       if (id == b->m_iID)
          return b->m_pUDT;
       b = b->m_pNext;
    }
 
-   return NULL;
+   return nullptr;
 }
 
 void CHash::insert(int32_t id, CUDT* u)
@@ -724,13 +724,13 @@ void CHash::insert(int32_t id, CUDT* u)
 void CHash::remove(int32_t id)
 {
    CBucket* b = m_pBucket[id % m_iHashSize];
-   CBucket* p = NULL;
+   CBucket* p = nullptr;
 
-   while (NULL != b)
+   while (nullptr != b)
    {
       if (id == b->m_iID)
       {
-         if (NULL == p)
+         if (nullptr == p)
             m_pBucket[id % m_iHashSize] = b->m_pNext;
          else
             p->m_pNext = b->m_pNext;
@@ -752,9 +752,9 @@ m_lRendezvousID(),
 m_RIDVectorLock()
 {
    #ifndef WIN32
-      pthread_mutex_init(&m_RIDVectorLock, NULL);
+      pthread_mutex_init(&m_RIDVectorLock, nullptr);
    #else
-      m_RIDVectorLock = CreateMutex(NULL, false, NULL);
+      m_RIDVectorLock = CreateMutex(nullptr, false, nullptr);
    #endif
 }
 
@@ -826,7 +826,7 @@ CUDT* CRendezvousQueue::retrieve(const sockaddr* addr, UDTSOCKET& id)
       }
    }
 
-   return NULL;
+   return nullptr;
 }
 
 void CRendezvousQueue::updateConnStatus()
@@ -851,7 +851,7 @@ void CRendezvousQueue::updateConnStatus()
 
          CPacket request;
          char* reqdata = new char [i->m_pUDT->m_iPayloadSize];
-         request.pack(0, NULL, reqdata, i->m_pUDT->m_iPayloadSize);
+         request.pack(0, nullptr, reqdata, i->m_pUDT->m_iPayloadSize);
          // ID = 0, connection request
          request.m_iID = !i->m_pUDT->m_bRendezvous ? 0 : i->m_pUDT->m_ConnRes.m_iID;
          int hs_size = i->m_pUDT->m_iPayloadSize;
@@ -868,16 +868,16 @@ void CRendezvousQueue::updateConnStatus()
 CRcvQueue::CRcvQueue():
 m_WorkerThread(),
 m_UnitQueue(),
-m_pRcvUList(NULL),
-m_pHash(NULL),
-m_pChannel(NULL),
-m_pTimer(NULL),
+m_pRcvUList(nullptr),
+m_pHash(nullptr),
+m_pChannel(nullptr),
+m_pTimer(nullptr),
 m_iPayloadSize(),
 m_bClosing(false),
 m_ExitCond(),
 m_LSLock(),
-m_pListener(NULL),
-m_pRendezvousQueue(NULL),
+m_pListener(nullptr),
+m_pRendezvousQueue(nullptr),
 m_vNewEntry(),
 m_IDLock(),
 m_mBuffer(),
@@ -885,16 +885,16 @@ m_PassLock(),
 m_PassCond()
 {
    #ifndef WIN32
-      pthread_mutex_init(&m_PassLock, NULL);
-      pthread_cond_init(&m_PassCond, NULL);
-      pthread_mutex_init(&m_LSLock, NULL);
-      pthread_mutex_init(&m_IDLock, NULL);
+      pthread_mutex_init(&m_PassLock, nullptr);
+      pthread_cond_init(&m_PassCond, nullptr);
+      pthread_mutex_init(&m_LSLock, nullptr);
+      pthread_mutex_init(&m_IDLock, nullptr);
    #else
-      m_PassLock = CreateMutex(NULL, false, NULL);
-      m_PassCond = CreateEvent(NULL, false, false, NULL);
-      m_LSLock = CreateMutex(NULL, false, NULL);
-      m_IDLock = CreateMutex(NULL, false, NULL);
-      m_ExitCond = CreateEvent(NULL, false, false, NULL);
+      m_PassLock = CreateMutex(nullptr, false, nullptr);
+      m_PassCond = CreateEvent(nullptr, false, false, nullptr);
+      m_LSLock = CreateMutex(nullptr, false, nullptr);
+      m_IDLock = CreateMutex(nullptr, false, nullptr);
+      m_ExitCond = CreateEvent(nullptr, false, false, nullptr);
    #endif
 }
 
@@ -904,13 +904,13 @@ CRcvQueue::~CRcvQueue()
 
    #ifndef WIN32
       if (0 != m_WorkerThread)
-         pthread_join(m_WorkerThread, NULL);
+         pthread_join(m_WorkerThread, nullptr);
       pthread_mutex_destroy(&m_PassLock);
       pthread_cond_destroy(&m_PassCond);
       pthread_mutex_destroy(&m_LSLock);
       pthread_mutex_destroy(&m_IDLock);
    #else
-      if (NULL != m_WorkerThread)
+      if (nullptr != m_WorkerThread)
          WaitForSingleObject(m_ExitCond, INFINITE);
       CloseHandle(m_WorkerThread);
       CloseHandle(m_PassLock);
@@ -953,15 +953,15 @@ void CRcvQueue::init(int qsize, int payload, int version, int hsize, CChannel* c
    m_pRendezvousQueue = new CRendezvousQueue;
 
    #ifndef WIN32
-      if (0 != pthread_create(&m_WorkerThread, NULL, CRcvQueue::worker, this))
+      if (0 != pthread_create(&m_WorkerThread, nullptr, CRcvQueue::worker, this))
       {
          m_WorkerThread = 0;
          throw CUDTException(3, 1);
       }
    #else
       DWORD threadID;
-      m_WorkerThread = CreateThread(NULL, 0, CRcvQueue::worker, this, 0, &threadID);
-      if (NULL == m_WorkerThread)
+      m_WorkerThread = CreateThread(nullptr, 0, CRcvQueue::worker, this, 0, &threadID);
+      if (nullptr == m_WorkerThread)
          throw CUDTException(3, 1);
    #endif
 }
@@ -975,7 +975,7 @@ void CRcvQueue::init(int qsize, int payload, int version, int hsize, CChannel* c
    CRcvQueue* self = (CRcvQueue*)param;
 
    sockaddr* addr = (AF_INET == self->m_UnitQueue.m_iIPversion) ? (sockaddr*) new sockaddr_in : (sockaddr*) new sockaddr_in6;
-   CUDT* u = NULL;
+   CUDT* u = nullptr;
    int32_t id;
 
    while (!self->m_bClosing)
@@ -988,7 +988,7 @@ void CRcvQueue::init(int qsize, int payload, int version, int hsize, CChannel* c
       while (self->ifNewEntry())
       {
          CUDT* ne = self->getNewEntry();
-         if (NULL != ne)
+         if (nullptr != ne)
          {
             self->m_pRcvUList->insert(ne);
             self->m_pHash->insert(ne->m_SocketID, ne);
@@ -997,7 +997,7 @@ void CRcvQueue::init(int qsize, int payload, int version, int hsize, CChannel* c
 
       // find next available slot for incoming packet
       CUnit* unit = self->m_UnitQueue.getNextAvailUnit();
-      if (NULL == unit)
+      if (nullptr == unit)
       {
          // no space, skip this packet
          CPacket temp;
@@ -1019,9 +1019,9 @@ void CRcvQueue::init(int qsize, int payload, int version, int hsize, CChannel* c
       // ID 0 is for connection request, which should be passed to the listening socket or rendezvous sockets
       if (0 == id)
       {
-         if (NULL != self->m_pListener)
+         if (nullptr != self->m_pListener)
             self->m_pListener->listen(addr, unit->m_Packet);
-         else if (NULL != (u = self->m_pRendezvousQueue->retrieve(addr, id)))
+         else if (nullptr != (u = self->m_pRendezvousQueue->retrieve(addr, id)))
          {
             // asynchronous connect: call connect here
             // otherwise wait for the UDT socket to retrieve this packet
@@ -1033,7 +1033,7 @@ void CRcvQueue::init(int qsize, int payload, int version, int hsize, CChannel* c
       }
       else if (id > 0)
       {
-         if (NULL != (u = self->m_pHash->lookup(id)))
+         if (nullptr != (u = self->m_pHash->lookup(id)))
          {
             if (CIPAddress::ipcmp(addr, u->m_pPeerAddr, u->m_iIPversion))
             {
@@ -1049,7 +1049,7 @@ void CRcvQueue::init(int qsize, int payload, int version, int hsize, CChannel* c
                }
             }
          }
-         else if (NULL != (u = self->m_pRendezvousQueue->retrieve(addr, id)))
+         else if (nullptr != (u = self->m_pRendezvousQueue->retrieve(addr, id)))
          {
             if (!u->m_bSynRecving)
                u->connect(unit->m_Packet);
@@ -1066,7 +1066,7 @@ TIMER_CHECK:
 
       CRNode* ul = self->m_pRcvUList->m_pUList;
       uint64_t ctime = currtime - 100000 * CTimer::getCPUFrequency();
-      while ((NULL != ul) && (ul->m_llTimeStamp < ctime))
+      while ((nullptr != ul) && (ul->m_llTimeStamp < ctime))
       {
          CUDT* v = ul->m_pUDT;
 
@@ -1096,7 +1096,7 @@ TIMER_CHECK:
       delete (sockaddr_in6*)addr;
 
    #ifndef WIN32
-      return NULL;
+      return nullptr;
    #else
       SetEvent(self->m_ExitCond);
       return 0;
@@ -1163,7 +1163,7 @@ int CRcvQueue::setListener(CUDT* u)
 {
    CGuard lslock(m_LSLock);
 
-   if (NULL != m_pListener)
+   if (nullptr != m_pListener)
       return -1;
 
    m_pListener = u;
@@ -1175,7 +1175,7 @@ void CRcvQueue::removeListener(const CUDT* u)
    CGuard lslock(m_LSLock);
 
    if (u == m_pListener)
-      m_pListener = NULL;
+      m_pListener = nullptr;
 }
 
 void CRcvQueue::registerConnector(const UDTSOCKET& id, CUDT* u, int ipv, const sockaddr* addr, uint64_t ttl)
@@ -1218,7 +1218,7 @@ CUDT* CRcvQueue::getNewEntry()
    CGuard listguard(m_IDLock);
 
    if (m_vNewEntry.empty())
-      return NULL;
+      return nullptr;
 
    CUDT* u = (CUDT*)*(m_vNewEntry.begin());
    m_vNewEntry.erase(m_vNewEntry.begin());

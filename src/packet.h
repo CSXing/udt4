@@ -101,7 +101,7 @@ public:
       // Returned value:
       //    None.
 
-   void pack(int pkttype, void* lparam = NULL, void* rparam = NULL, int size = 0);
+   void pack(int pkttype, void* lparam = nullptr, void* rparam = nullptr, int size = 0);
 
       // Functionality:
       //    Read the packet vector.

@@ -164,7 +164,7 @@ __pad()
       m_nHeader[i] = 0;
    m_PacketVector[0].iov_base = (char *)m_nHeader;
    m_PacketVector[0].iov_len = CPacket::m_iPktHdrSize;
-   m_PacketVector[1].iov_base = NULL;
+   m_PacketVector[1].iov_base = nullptr;
    m_PacketVector[1].iov_len = 0;
 }
 
@@ -192,7 +192,7 @@ void CPacket::pack(int pkttype, void* lparam, void* rparam, int size)
    {
    case 2: //0010 - Acknowledgement (ACK)
       // ACK packet seq. no.
-      if (NULL != lparam)
+      if (nullptr != lparam)
          m_nHeader[1] = *(int32_t *)lparam;
 
       // data ACK seq. no. 
@@ -208,7 +208,7 @@ void CPacket::pack(int pkttype, void* lparam, void* rparam, int size)
 
       // control info field should be none
       // but "writev" does not allow this
-      m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
+      m_PacketVector[1].iov_base = (char *)&__pad; //nullptr;
       m_PacketVector[1].iov_len = 4; //0;
 
       break;
@@ -223,7 +223,7 @@ void CPacket::pack(int pkttype, void* lparam, void* rparam, int size)
    case 4: //0100 - Congestion Warning
       // control info field should be none
       // but "writev" does not allow this
-      m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
+      m_PacketVector[1].iov_base = (char *)&__pad; //nullptr;
       m_PacketVector[1].iov_len = 4; //0;
   
       break;
@@ -231,7 +231,7 @@ void CPacket::pack(int pkttype, void* lparam, void* rparam, int size)
    case 1: //0001 - Keep-alive
       // control info field should be none
       // but "writev" does not allow this
-      m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
+      m_PacketVector[1].iov_base = (char *)&__pad; //nullptr;
       m_PacketVector[1].iov_len = 4; //0;
 
       break;
@@ -246,7 +246,7 @@ void CPacket::pack(int pkttype, void* lparam, void* rparam, int size)
    case 5: //0101 - Shutdown
       // control info field should be none
       // but "writev" does not allow this
-      m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
+      m_PacketVector[1].iov_base = (char *)&__pad; //nullptr;
       m_PacketVector[1].iov_len = 4; //0;
 
       break;
@@ -267,7 +267,7 @@ void CPacket::pack(int pkttype, void* lparam, void* rparam, int size)
 
       // control info field should be none
       // but "writev" does not allow this
-      m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
+      m_PacketVector[1].iov_base = (char *)&__pad; //nullptr;
       m_PacketVector[1].iov_len = 4; //0;
 
       break;
@@ -278,7 +278,7 @@ void CPacket::pack(int pkttype, void* lparam, void* rparam, int size)
       // "rparam" is the control information
       m_nHeader[0] |= *(int32_t *)lparam;
 
-      if (NULL != rparam)
+      if (nullptr != rparam)
       {
          m_PacketVector[1].iov_base = (char *)rparam;
          m_PacketVector[1].iov_len = size;

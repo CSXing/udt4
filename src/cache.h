@@ -63,7 +63,7 @@ public:
       // Parameters:
       //    None.
       // Returned value:
-      //    Pointer to the new item, or NULL if failed.
+      //    Pointer to the new item, or nullptr if failed.
 
    virtual CCacheItem* clone() = 0;
 
@@ -148,7 +148,7 @@ public:
       if (key >= m_iMaxSize)
          key %= m_iHashSize;
 
-      T* curr = NULL;
+      T* curr = nullptr;
 
       ItemPtrList& item_list = m_vHashPtr[key];
       for (typename ItemPtrList::iterator i = item_list.begin(); i != item_list.end(); ++ i)

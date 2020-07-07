@@ -119,7 +119,7 @@ int CEPoll::add_ssock(const int eid, const SYSSOCKET& s, const int* )
    epoll_event ev;
    memset(&ev, 0, sizeof(epoll_event));
 
-   if (NULL == events)
+   if (nullptr == events)
       ev.events = EPOLLIN | EPOLLOUT | EPOLLERR;
    else
    {
@@ -178,7 +178,7 @@ int CEPoll::remove_ssock(const int eid, const SYSSOCKET& s)
 
 size_t CEPoll::wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writefds, int64_t msTimeOut, set<SYSSOCKET>* lrfds, set<SYSSOCKET>* lwfds)
 {
-   // if all fields is NULL and waiting time is infinite, then this would be a deadlock
+   // if all fields is nullptr and waiting time is infinite, then this would be a deadlock
    if (!readfds && !writefds && !lrfds && lwfds && (msTimeOut < 0))
       throw CUDTException(5, 3, 0);
 
@@ -210,14 +210,14 @@ size_t CEPoll::wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writ
       }
 
       // Sockets with exceptions are returned to both read and write sets.
-      if ((NULL != readfds) && (!p->second.m_sUDTReads.empty() || !p->second.m_sUDTExcepts.empty()))
+      if ((nullptr != readfds) && (!p->second.m_sUDTReads.empty() || !p->second.m_sUDTExcepts.empty()))
       {
          *readfds = p->second.m_sUDTReads;
          for (set<UDTSOCKET>::const_iterator i = p->second.m_sUDTExcepts.begin(); i != p->second.m_sUDTExcepts.end(); ++ i)
             readfds->insert(*i);
          total += p->second.m_sUDTReads.size() + p->second.m_sUDTExcepts.size();
       }
-      if ((NULL != writefds) && (!p->second.m_sUDTWrites.empty() || !p->second.m_sUDTExcepts.empty()))
+      if ((nullptr != writefds) && (!p->second.m_sUDTWrites.empty() || !p->second.m_sUDTExcepts.empty()))
       {
          *writefds = p->second.m_sUDTWrites;
          for (set<UDTSOCKET>::const_iterator i = p->second.m_sUDTExcepts.begin(); i != p->second.m_sUDTExcepts.end(); ++ i)
@@ -234,12 +234,12 @@ size_t CEPoll::wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writ
 
          for (int i = 0; i < nfds; ++ i)
          {
-            if ((NULL != lrfds) && (ev[i].events & EPOLLIN))
+            if ((nullptr != lrfds) && (ev[i].events & EPOLLIN))
            {
                lrfds->insert(ev[i].data.fd);
                ++ total;
             }
-            if ((NULL != lwfds) && (ev[i].events & EPOLLOUT))
+            if ((nullptr != lwfds) && (ev[i].events & EPOLLOUT))
             {
                lwfds->insert(ev[i].data.fd);
                ++ total;
@@ -267,7 +267,7 @@ size_t CEPoll::wait(const int eid, set<UDTSOCKET>* readfds, set<UDTSOCKET>* writ
          timeval tv;
          tv.tv_sec = 0;
          tv.tv_usec = 0;
-         if (::select(0, &readfds2, &writefds2, NULL, &tv) > 0)
+         if (::select(0, &readfds2, &writefds2, nullptr, &tv) > 0)
          {
             for (set<SYSSOCKET>::const_iterator i = p->second.m_sLocals.begin(); i != p->second.m_sLocals.end(); ++ i)
             {
